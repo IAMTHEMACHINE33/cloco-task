@@ -1,6 +1,4 @@
-import { enumToQuery } from "../helpers/tsenum_to_pgquery";
-import pg from "pg";
-const { Query } = pg
+import { objToQuery } from "../helpers/objToQuery";
 
 export enum Gender {
     Male = "m",
@@ -12,7 +10,7 @@ export const gender = `
 DO $$ 
 BEGIN
     IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'gender') THEN
-        CREATE TYPE gender AS ENUM (${enumToQuery(Gender)});
+        CREATE TYPE gender AS ENUM (${objToQuery(Gender)});
     END IF;
 END $$;
 `

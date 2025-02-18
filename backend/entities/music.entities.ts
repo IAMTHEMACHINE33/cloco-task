@@ -1,22 +1,23 @@
 import { Genre } from "./genre.entities"
 import { IArtist } from "./artist.entities"
+import { TABLE_NAME } from "../constants"
 export interface IMusic {
     title: string,
     album_name: string,
     genre: Genre,
     artist_id: string | IArtist,
-    created_at: Date,
-    updated_at: Date
+    created_at: string,
+    updated_at: string
 }
 export const music = `
-CREATE TABLE IF NOT EXISTS "music"(
+CREATE TABLE IF NOT EXISTS "${TABLE_NAME.MUSIC}"(
 "id" uuid DEFAULT uuid_generate_v4(),
 "title" VARCHAR(255),
 "album_name" VARCHAR(255),
 "genre" GENRE,
 "artist_id" uuid,
-"created_at" TIMESTAMP,
-"updated_at" TIMESTAMP,
+"created_at" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+"updated_at" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
 PRIMARY KEY("id"),
 FOREIGN KEY("artist_id") REFERENCES "artist"("id")
 );`;

@@ -1,6 +1,4 @@
-import { enumToQuery } from "../helpers/tsenum_to_pgquery";
-import pg from "pg";
-const { Query } = pg
+import { objToQuery } from "../helpers/objToQuery";
 
 export enum Role {
     SuperAdmin = "super_admin",
@@ -13,7 +11,7 @@ export const role =`
     BEGIN
     IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'role') THEN
         CREATE TYPE "role"
-        AS ENUM (${enumToQuery(Role)});
+        AS ENUM (${objToQuery(Role)});
     END IF;
     END $$;
 `;

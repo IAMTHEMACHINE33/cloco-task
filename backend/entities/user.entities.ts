@@ -1,39 +1,37 @@
 import pg from "pg"
-import {enumToQuery} from "../helpers/tsenum_to_pgquery"
 import { Role } from "./role.entities"
 import { Gender } from "./gender.entities"
-const { Query } = pg
-
+import { TABLE_NAME } from "../constants"
 export interface IUser {
     first_name: string,
     last_name: string,
     email: string,
     password: string,
     phone: string,
-    dob: Date,
+    dob: string,
     gender: Gender
     address: string,
     role: Role,
-    created_at: Date,
-    updated_at: Date
+    created_at: string,
+    updated_at: string 
 }
 
 export const user = `
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
-CREATE TABLE IF NOT EXISTS "user" (
+CREATE TABLE IF NOT EXISTS "${TABLE_NAME.USER}" (
 "id" uuid DEFAULT uuid_generate_v4(),
-"first_name" VARCHAR(255),
-"last_name" VARCHAR(255),
-"email" VARCHAR(255),
+"first_name" VARCHAR(255) NOT NULL,
+"last_name" VARCHAR(255) NOT NULL,
+"email" VARCHAR(255) UNIQUE NOT NULL,
 "password" VARCHAR(500),
-"phone" VARCHAR(20),
-"dob" TIMESTAMP,
+"phone" VARCHAR(20) UNIQUE,
+"dob" TIMESTAMPTZ,
 "gender" GENDER,
 "address" VARCHAR(255),
 "role" ROLE,
-"created_at" TIMESTAMP,
-"updated_at" TIMESTAMP,
+"created_at" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+"updated_at" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
 PRIMARY KEY ("id")
 );
 `
