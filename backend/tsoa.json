@@ -1,0 +1,21 @@
+{
+    "entryFile": "./app.ts",
+    "noImplicitAdditionalProperties": "throw-on-extras",
+    "controllerPathGlobs": ["./controllers/*.controller.ts"],
+    "spec": {
+        "outputDirectory": "./build",
+        "specVersion": 3,
+        "securityDefinitions": {
+            "bearerUser":{
+                "type": "apiKey",
+                "name": "Authorization",
+                "in": "header",
+                "description": "Enter token in Bearer[space]token format for User"
+            }
+        }
+    },
+    "routes": {
+        "routesDir": "./build"
+    }
+}
+
