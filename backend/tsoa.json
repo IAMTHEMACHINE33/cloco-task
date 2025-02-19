@@ -6,7 +6,7 @@
         "outputDirectory": "./build",
         "specVersion": 3,
         "securityDefinitions": {
-            "bearerUser":{
+            "jwt":{
                 "type": "apiKey",
                 "name": "Authorization",
                 "in": "header",
@@ -15,7 +15,8 @@
         }
     },
     "routes": {
-        "routesDir": "./build"
+        "routesDir": "./build",
+        "authenticationModule": "./middlewares/authentication.middleware.ts"
     }
 }
 
