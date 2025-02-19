@@ -2,6 +2,7 @@ import { Genre } from "./genre.entities"
 import { IArtist } from "./artist.entities"
 import { TABLE_NAME } from "../constants"
 export interface IMusic {
+    id: string,
     title: string,
     album_name: string,
     genre: Genre,
