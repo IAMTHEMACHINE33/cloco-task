@@ -23,7 +23,7 @@
 				],
 				"type": "string"
 			},
-			"IUser": {
+			"Pick_IUser.Exclude_keyofIUser.id-or-created_at-or-updated_at__": {
 				"properties": {
 					"first_name": {
 						"type": "string"
@@ -51,12 +51,6 @@
 					},
 					"role": {
 						"$ref": "#/components/schemas/Role"
-					},
-					"created_at": {
-						"type": "string"
-					},
-					"updated_at": {
-						"type": "string"
 					}
 				},
 				"required": [
@@ -68,16 +62,238 @@
 					"dob",
 					"gender",
 					"address",
-					"role",
+					"role"
+				],
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"Omit_IUser.id-or-created_at-or-updated_at_": {
+				"$ref": "#/components/schemas/Pick_IUser.Exclude_keyofIUser.id-or-created_at-or-updated_at__",
+				"description": "Construct a type with the properties of T except for those in type K."
+			},
+			"IUserInput": {
+				"$ref": "#/components/schemas/Omit_IUser.id-or-created_at-or-updated_at_"
+			},
+			"Partial_IUserInput_": {
+				"properties": {
+					"first_name": {
+						"type": "string"
+					},
+					"last_name": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
+					},
+					"phone": {
+						"type": "string"
+					},
+					"dob": {
+						"type": "string"
+					},
+					"gender": {
+						"$ref": "#/components/schemas/Gender"
+					},
+					"address": {
+						"type": "string"
+					},
+					"role": {
+						"$ref": "#/components/schemas/Role"
+					}
+				},
+				"type": "object",
+				"description": "Make all properties in T optional"
+			},
+			"IUserOptional": {
+				"$ref": "#/components/schemas/Partial_IUserInput_"
+			},
+			"Genre": {
+				"enum": [
+					"rnb",
+					"country",
+					"classic",
+					"rock",
+					"jazz"
+				],
+				"type": "string"
+			},
+			"IArtist": {
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"dob": {
+						"type": "string"
+					},
+					"gender": {
+						"$ref": "#/components/schemas/Gender"
+					},
+					"first_release_year": {
+						"type": "number",
+						"format": "double"
+					},
+					"no_of_albums_released": {
+						"type": "number",
+						"format": "double"
+					},
+					"created_at": {
+						"type": "string"
+					},
+					"updated_at": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"id",
+					"name",
+					"dob",
+					"gender",
+					"first_release_year",
+					"no_of_albums_released",
 					"created_at",
 					"updated_at"
 				],
 				"type": "object",
 				"additionalProperties": false
+			},
+			"Pick_IMusic.Exclude_keyofIMusic.id-or-created_at-or-updated_at__": {
+				"properties": {
+					"title": {
+						"type": "string"
+					},
+					"album_name": {
+						"type": "string"
+					},
+					"genre": {
+						"$ref": "#/components/schemas/Genre"
+					},
+					"artist_id": {
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{
+								"$ref": "#/components/schemas/IArtist"
+							}
+						]
+					}
+				},
+				"required": [
+					"title",
+					"album_name",
+					"genre",
+					"artist_id"
+				],
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"Omit_IMusic.id-or-created_at-or-updated_at_": {
+				"$ref": "#/components/schemas/Pick_IMusic.Exclude_keyofIMusic.id-or-created_at-or-updated_at__",
+				"description": "Construct a type with the properties of T except for those in type K."
+			},
+			"IMusicInput": {
+				"$ref": "#/components/schemas/Omit_IMusic.id-or-created_at-or-updated_at_"
+			},
+			"Partial_IMusicInput_": {
+				"properties": {
+					"title": {
+						"type": "string"
+					},
+					"album_name": {
+						"type": "string"
+					},
+					"genre": {
+						"$ref": "#/components/schemas/Genre"
+					},
+					"artist_id": {
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{
+								"$ref": "#/components/schemas/IArtist"
+							}
+						]
+					}
+				},
+				"type": "object",
+				"description": "Make all properties in T optional"
+			},
+			"IMusicOptional": {
+				"$ref": "#/components/schemas/Partial_IMusicInput_"
+			},
+			"Pick_IArtist.Exclude_keyofIArtist.id-or-created_at-or-updated_at__": {
+				"properties": {
+					"dob": {
+						"type": "string"
+					},
+					"gender": {
+						"$ref": "#/components/schemas/Gender"
+					},
+					"name": {
+						"type": "string"
+					},
+					"first_release_year": {
+						"type": "number",
+						"format": "double"
+					},
+					"no_of_albums_released": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"dob",
+					"gender",
+					"name",
+					"first_release_year",
+					"no_of_albums_released"
+				],
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"Omit_IArtist.id-or-created_at-or-updated_at_": {
+				"$ref": "#/components/schemas/Pick_IArtist.Exclude_keyofIArtist.id-or-created_at-or-updated_at__",
+				"description": "Construct a type with the properties of T except for those in type K."
+			},
+			"IArtistInput": {
+				"$ref": "#/components/schemas/Omit_IArtist.id-or-created_at-or-updated_at_"
+			},
+			"Partial_IArtistInput_": {
+				"properties": {
+					"dob": {
+						"type": "string"
+					},
+					"gender": {
+						"$ref": "#/components/schemas/Gender"
+					},
+					"name": {
+						"type": "string"
+					},
+					"first_release_year": {
+						"type": "number",
+						"format": "double"
+					},
+					"no_of_albums_released": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"type": "object",
+				"description": "Make all properties in T optional"
+			},
+			"IArtistOptional": {
+				"$ref": "#/components/schemas/Partial_IArtistInput_"
 			}
 		},
 		"securitySchemes": {
-			"bearerUser": {
+			"jwt": {
 				"type": "apiKey",
 				"name": "Authorization",
 				"in": "header",
@@ -110,14 +326,20 @@
 				"tags": [
 					"user"
 				],
-				"security": [],
+				"security": [
+					{
+						"jwt": [
+							"super_admin"
+						]
+					}
+				],
 				"parameters": [],
 				"requestBody": {
 					"required": true,
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/IUser"
+								"$ref": "#/components/schemas/IUserInput"
 							}
 						}
 					}
@@ -164,6 +386,436 @@
 						}
 					}
 				}
+			}
+		},
+		"/user/update/{userId}": {
+			"patch": {
+				"operationId": "UpdateUser",
+				"responses": {
+					"200": {
+						"description": "Updated",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				},
+				"tags": [
+					"user"
+				],
+				"security": [
+					{
+						"jwt": [
+							"super_admin"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IUserOptional"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/user/delete/{userId}": {
+			"delete": {
+				"operationId": "DeleteUser",
+				"responses": {
+					"200": {
+						"description": "Deleted",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				},
+				"tags": [
+					"user"
+				],
+				"security": [
+					{
+						"jwt": [
+							"super_admin"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/user": {
+			"get": {
+				"operationId": "GetUser",
+				"responses": {
+					"200": {
+						"description": "Fetched",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				},
+				"tags": [
+					"user"
+				],
+				"security": [
+					{
+						"jwt": [
+							"super_admin"
+						]
+					}
+				],
+				"parameters": []
+			}
+		},
+		"/music/create": {
+			"post": {
+				"operationId": "CreateMusic",
+				"responses": {
+					"201": {
+						"description": "Created",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				},
+				"tags": [
+					"music"
+				],
+				"security": [
+					{
+						"jwt": [
+							"artist"
+						]
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IMusicInput"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/music/update/{musicId}": {
+			"patch": {
+				"operationId": "UpdateMusic",
+				"responses": {
+					"200": {
+						"description": "Updated",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				},
+				"tags": [
+					"music"
+				],
+				"security": [
+					{
+						"jwt": [
+							"artist"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "musicId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IMusicOptional"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/music/delete/{musicId}": {
+			"delete": {
+				"operationId": "DeleteMusic",
+				"responses": {
+					"200": {
+						"description": "Deleted",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				},
+				"tags": [
+					"music"
+				],
+				"security": [
+					{
+						"jwt": [
+							"artist"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "musicId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/music/{artistId}": {
+			"get": {
+				"operationId": "GetArtistMusic",
+				"responses": {
+					"200": {
+						"description": "Fetched",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				},
+				"tags": [
+					"music"
+				],
+				"security": [
+					{
+						"jwt": [
+							"super_admin",
+							"artist_manager",
+							"artist"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "artistId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/music": {
+			"get": {
+				"operationId": "GetMusic",
+				"responses": {
+					"200": {
+						"description": "Fetched",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				},
+				"tags": [
+					"music"
+				],
+				"security": [
+					{
+						"jwt": [
+							"super_admin",
+							"artist_manager",
+							"artist"
+						]
+					}
+				],
+				"parameters": []
+			}
+		},
+		"/artist/create": {
+			"post": {
+				"operationId": "CreateArtist",
+				"responses": {
+					"201": {
+						"description": "Created",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				},
+				"tags": [
+					"artist"
+				],
+				"security": [
+					{
+						"jwt": [
+							"artist_manager"
+						]
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IArtistInput"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/artist/update/{artistId}": {
+			"patch": {
+				"operationId": "UpdateArtist",
+				"responses": {
+					"200": {
+						"description": "Updated",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				},
+				"tags": [
+					"artist"
+				],
+				"security": [
+					{
+						"jwt": [
+							"artist_manager"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "artistId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IArtistOptional"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/artist/delete/{artistId}": {
+			"delete": {
+				"operationId": "DeleteArtist",
+				"responses": {
+					"200": {
+						"description": "Deleted",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				},
+				"tags": [
+					"artist"
+				],
+				"security": [
+					{
+						"jwt": [
+							"artist_manager"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "artistId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/artist": {
+			"get": {
+				"operationId": "GetArtist",
+				"responses": {
+					"200": {
+						"description": "Fetched",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				},
+				"tags": [
+					"artist"
+				],
+				"security": [
+					{
+						"jwt": [
+							"super_admin",
+							"artist_manager"
+						]
+					}
+				],
+				"parameters": []
 			}
 		}
 	},
