@@ -145,7 +145,6 @@ export function RegisterRoutes(app: Router) {
                 requestBody: {"in":"body","name":"requestBody","required":true,"ref":"IUserInput"},
         };
         app.post('/user/register',
-            authenticateMiddleware([{"jwt":["super_admin"]}]),
             ...(fetchMiddlewares<RequestHandler>(UserController)),
             ...(fetchMiddlewares<RequestHandler>(UserController.prototype.registerUser)),
 

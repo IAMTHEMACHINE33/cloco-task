@@ -24,7 +24,6 @@ export class UserController extends Controller{
         this.getUser = this.getUser.bind(this);
   }
 
-    @Security("jwt", [Role.SuperAdmin])
     @SuccessResponse("201", "Created")
     @Post("/register")
     async registerUser(

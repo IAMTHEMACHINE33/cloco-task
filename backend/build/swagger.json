@@ -326,13 +326,7 @@
 				"tags": [
 					"user"
 				],
-				"security": [
-					{
-						"jwt": [
-							"super_admin"
-						]
-					}
-				],
+				"security": [],
 				"parameters": [],
 				"requestBody": {
 					"required": true,
