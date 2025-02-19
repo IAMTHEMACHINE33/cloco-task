@@ -24,4 +24,39 @@ export class BaseService {
                 LIMIT 1;`
             )).rows[0]
     }
+
+
+    async getWhere<T>(where: Partial<T>): Promise<T[]>{
+        return (await db.query
+            (
+                `SELECT * FROM "${this.table_name}"
+                WHERE ${objToWhereQuery(where)};`
+            )).rows
+    }
+
+    async updateWhere<T>(where: Partial<T>, change: Partial<T>) {
+        return (await db.query
+            (
+                `UPDATE "${this.table_name}"
+                SET ${objToWhereQuery(change, ', ')}
+                WHERE ${objToWhereQuery(where)};`
+            )
+        )
+    }
+
+    async deleteWhere<T>(where: Partial<T>){
+        return (await db.query
+            (
+                `DELETE FROM "${this.table_name}"
+                WHERE ${objToWhereQuery(where)};`
+            )
+        )
+    }
+
+    async getAll() {
+        return (await db.query
+        (
+        `SELECT * FROM "${this.table_name}";`
+        )).rows
+    }
 }

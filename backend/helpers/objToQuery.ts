@@ -8,8 +8,11 @@ export const objToKeyQuery = (obj: Record<string, any>) => {
     return result;
 }
 
-export const objToWhereQuery = (obj: Record<string, any>) => {
-    const result = Object.entries(obj).map((ele) => `"${ele[0]}" = '${ele[1]}'`).join(' AND ')
-    console.log('result',result)
+export const objToEntriesQuery = (obj: Record<string, any>, join: string) => {
+    const result = Object.entries(obj).map((ele) => `"${ele[0]}" = '${ele[1]}'`).join(join)
     return result;
+}
+
+export const objToWhereQuery = (obj: Record<string, any>, join: string = ' AND ') => {
+    return objToEntriesQuery(obj, join)
 }
