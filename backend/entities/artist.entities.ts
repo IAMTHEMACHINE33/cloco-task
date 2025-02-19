@@ -2,13 +2,14 @@ import { Gender } from "./gender.entities"
 import { TABLE_NAME } from "../constants"
 
 export interface IArtist {
+    id: string,
     name: string,
-    dob: Date,
+    dob: string,
     gender: Gender,
     first_release_year: number,
     no_of_albums_released: number,
     created_at: string,
-    updaetd_at: string
+    updated_at: string
 }
 
 export const artist = `
