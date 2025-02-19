@@ -53,10 +53,12 @@ export class BaseService {
         )
     }
 
-    async getAll() {
+    async getAll(pageNumber: number, rowsPerPage: number) {
         return (await db.query
         (
-        `SELECT * FROM "${this.table_name}";`
+        `SELECT * FROM "${this.table_name}"
+        LIMIT ${rowsPerPage}
+        OFFSET ${(pageNumber - 1) * rowsPerPage};`
         )).rows
     }
 }

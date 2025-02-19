@@ -1,4 +1,4 @@
-import { Controller, Route, Tags, Get, SuccessResponse, Post, Body, Patch, Delete, Path, Security } from "tsoa";
+import { Controller, Route, Tags, Get, SuccessResponse, Post, Body, Patch, Delete, Path, Security, Query } from "tsoa";
 import { DatabaseError } from 'pg';
 import { IMusic } from "../entities/music.entities";
 import * as musicValidator from "../validators/music.validator"
@@ -137,9 +137,12 @@ export class MusicController extends Controller{
     @Security("jwt", [Role.SuperAdmin, Role.ArtistManager, Role.Artist])
     @SuccessResponse("200", "Fetched")
     @Get("/")
-    async getMusic():Promise<any>{
+    async getMusic(
+        @Query() pageNumber: number = 1,
+        @Query() rowsPerPage: number = 10,
+    ):Promise<any>{
         try {
-            const data = await this.musicService.getAll();
+            const data = await this.musicService.getAll(pageNumber, rowsPerPage);
             return { message: 'Successfully fetched', data: data};
         } catch (error) {
             console.error(error)

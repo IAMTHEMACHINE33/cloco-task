@@ -11,15 +11,12 @@ export function expressAuthentication(
   securityName: string,
   scopes: string[]
 ): Promise<any> {
-    console.log('securityName',securityName)
-    console.log('scopes', scopes)
     if (securityName !== "jwt") 
         return Promise.reject(new Error("JWT not found"));
 
     const token =
       request.body.token ||
       request.headers.authorization
-    console.log('token', token)
 
     return new Promise((resolve, reject) => {
       if (!token) {

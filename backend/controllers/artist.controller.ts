@@ -1,4 +1,4 @@
-import { Controller, Route, Tags, Get, SuccessResponse, Post, Body, Patch, Delete, Path, Security } from "tsoa";
+import { Controller, Route, Tags, Get, SuccessResponse, Post, Body, Patch, Delete, Path, Security, Query } from "tsoa";
 import { DatabaseError } from 'pg';
 import { IArtist } from "../entities/artist.entities";
 import { ArtistService } from "../services/artist.services";
@@ -120,9 +120,12 @@ export class ArtistController extends Controller{
     @Security("jwt", [Role.SuperAdmin, Role.ArtistManager])
     @SuccessResponse("200", "Fetched")
     @Get("/")
-    async getArtist():Promise<any>{
+    async getArtist(
+        @Query() pageNumber: number = 1,
+        @Query() rowsPerPage: number = 10,
+    ):Promise<any>{
         try {
-            const data = await this.artistService.getAll();
+            const data = await this.artistService.getAll(pageNumber, rowsPerPage);
             return { message: 'Successfully fetched', data: data};
         } catch (error) {
             console.error(error)

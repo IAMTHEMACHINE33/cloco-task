@@ -1,5 +1,5 @@
 import { UserService } from '../services/user.services';
-import { Controller, Route, Tags, Get, SuccessResponse, Post, Body, Patch, Delete, Path, Security } from "tsoa";
+import { Controller, Route, Tags, Get, SuccessResponse, Post, Body, Patch, Delete, Path, Security, Query } from "tsoa";
 import { IUser } from "../entities/user.entities"
 import * as userValidator from '../validators/user.validator'
 import { DatabaseError } from 'pg';
@@ -167,9 +167,12 @@ export class UserController extends Controller{
     @Security("jwt", [Role.SuperAdmin])
     @SuccessResponse("200", "Fetched")
     @Get("/")
-    async getUser():Promise<any>{
+    async getUser(
+        @Query() pageNumber: number = 1,
+        @Query() rowsPerPage: number = 10,
+    ):Promise<any>{
         try {
-            const data = await this.userService.getAll();
+            const data = await this.userService.getAll(pageNumber, rowsPerPage);
             return { message: 'Successfully fetched', data: data};
         } catch (error) {
             console.error(error)
