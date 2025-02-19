@@ -1,7 +1,7 @@
 import express, {urlencoded} from "express";
-import routes from './routes/index';
 import { RegisterRoutes } from "./build/routes";
 import {connectDb} from './connections/postgres.connection';
+import { errorHandler } from "./utils/errorHandler";
 const app = express();
 
 app.use(express.json());
@@ -10,12 +10,13 @@ app.use(
     extended: true,
   })
 );
-app.use('/api', routes);
 
 // Swagger
 RegisterRoutes(app);
 
 // Db
 connectDb();
+
+app.use(errorHandler);
 
 export default app
