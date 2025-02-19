@@ -3,6 +3,7 @@ import { Role } from "./role.entities"
 import { Gender } from "./gender.entities"
 import { TABLE_NAME } from "../constants"
 export interface IUser {
+    id: string,
     first_name: string,
     last_name: string,
     email: string,
