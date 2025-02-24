@@ -1,7 +1,7 @@
 import pg from "pg"
 import { Role } from "./role.entities"
 import { Gender } from "./gender.entities"
-import { TABLE_NAME } from "../constants"
+import { TABLE_NAME, TABLE_VIEW } from "../constants"
 export interface IUser {
     id: string,
     first_name: string,
@@ -35,4 +35,19 @@ CREATE TABLE IF NOT EXISTS "${TABLE_NAME.USER}" (
 "updated_at" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
 PRIMARY KEY ("id")
 );
+`
+export const userView = `
+CREATE OR REPLACE VIEW "${TABLE_VIEW.USER_VIEW}" AS
+SELECT "id",
+"first_name",
+"last_name",
+"email",
+"phone",
+"dob",
+"gender",
+"address",
+"role",
+"created_at",
+"updated_at"
+FROM "${TABLE_NAME.USER}";
 `

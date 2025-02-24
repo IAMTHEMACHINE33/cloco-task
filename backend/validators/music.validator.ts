@@ -15,6 +15,7 @@ export const createMusic = async(req: Partial<IMusic>) => {
         artist_id: z
         .string()
         .uuid()
+        .optional()
     })
 
     const enterDetails = req

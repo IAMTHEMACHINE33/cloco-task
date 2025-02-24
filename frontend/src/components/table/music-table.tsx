@@ -1,44 +1,46 @@
-import { Link } from "react-router-dom";
-import { Eye, Pencil, Trash2 } from "lucide-react";
+import { ArrowLeft, Eye, Pencil, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import Popover from "../ui/popover";
 import { useDeleteArtist, useEditArtist, useGetArtists } from "@/hooks/requests/useArtist";
-import { IArtist } from "../../../services/index.ts";
+import { IMusic } from "../../../services/index.ts";
+import { useDeleteMusic, useEditMusic, useGetArtistMusic } from "@/hooks/requests/useMusic.ts";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAuthRole } from "@/hooks/requests/useAuthDetails.ts";
 import { ROLES } from "@/constant/roles.ts";
 
 const column = [
-    {display_name: "Artist", system_name: "name"}, 
-    {display_name: "Dob", system_name:"dob"},
-    {display_name: "Gender", system_name: "gender"},
-    {display_name: "First release year", system_name: "first_release_year"},
-    {display_name: "No of albums released", system_name: "no_of_albums_released"},
+    {display_name: "Title", system_name: "title"}, 
+    {display_name: "Album Name", system_name:"album_name"},
+    {display_name: "Genre", system_name: "genre"},
     {display_name: "Actions", actions: "ved"}
 ];
 
 
-const ArtistsTable = (key: boolean) => {
+const MusicTable = (key: boolean) => {
 
     const authRole = useAuthRole()
-    const [artistsData, setArtistsData] = useState<IArtist[]>([]);
+    const navigate = useNavigate()
+    const { artistId } = useParams()
+
+    const [artistsData, setArtistsData] = useState<IMusic[]>([]);
     const [isPopoverVisible, setPopoverVisible] = useState<boolean>(false);
     const [actionType, setActionType] = useState<"edit" | "delete" | null>(null);
-    const [formData, setFormData] = useState<Partial<IArtist>>({});
-    const [selectedArtist, setSelectedArtist] = useState<IArtist | null>(null);
-    const { apiHit: deleteUser } = useDeleteArtist();
-    const { apiHit: editUser } = useEditArtist();
+    const [formData, setFormData] = useState<Partial<IMusic>>({});
+    const [selectedArtist, setSelectedArtist] = useState<IMusic | null>(null);
+    const { apiHit: deleteMusic } = useDeleteMusic();
+    const { apiHit: editMusic } = useEditMusic();
 
     const handleActionClick = (artistId: string, action: "edit" | "delete") => {
         const artist = artistsData.find((a) => a.id === artistId) || null;
         setSelectedArtist(artist);
         setActionType(action);
 
-        const { created_at, dob, updated_at, ...filteredArtist} = artist ?? {}
-        setFormData(filteredArtist ?? {}); // Pre-fill form data if editing
+        const { created_at, updated_at, artist_id, ...filteredArtist} = artist ?? {}
+        setFormData(filteredArtist ?? {}); 
         setPopoverVisible(true);
     };
 
-    const handleConfirmAction = (formData: Partial<IArtist>) => {
+    const handleConfirmAction = (formData: Partial<IMusic>) => {
         if (actionType === "delete") {
             console.log("Deleting artist with ID:", selectedArtist?.id);
             if(selectedArtist?.id)
@@ -52,12 +54,12 @@ const ArtistsTable = (key: boolean) => {
     };
 
     const handleDelete = async(artistId: string) => {
-        await deleteUser(artistId)
+        await deleteMusic(artistId)
         fetchData()
     }
-    const handleEdit = async(artist: Partial<IArtist>) => {
+    const handleEdit = async(artist: Partial<IMusic>) => {
         const {id, ...artist_data}  = artist
-        await editUser(id!, artist_data)
+        await editMusic(id!, artist_data)
         fetchData()
 
     }
@@ -72,15 +74,14 @@ const ArtistsTable = (key: boolean) => {
         }));
     };
 
-    const [currentPage, setCurrentPage] = useState(1); 
-    const entriesPerPage = 10; 
 
-    const { apiHit: getArtistsData } = useGetArtists()
+    const { apiHit: getMusicData } = useGetArtistMusic()
 
     const fetchData = async () => {
         try {
-            const artistData = await getArtistsData(currentPage, entriesPerPage);
-            setArtistsData(artistData.data)
+            const artistData = await getMusicData(artistId!);
+            console.log('artistData',artistData)
+            setArtistsData(artistData.data!) 
         } catch (error) {
             console.error('Error fetching artist data:', error);
         }
@@ -89,19 +90,20 @@ const ArtistsTable = (key: boolean) => {
     useEffect(() => {
         fetchData()
 
-    }, [currentPage, entriesPerPage])
+    }, [])
 
-    const handlePrev = () => {
-        setCurrentPage(currentPage - 1);
-    };
-
-    const handleNext = () => {
-        if (artistsData.length > 0)
-            setCurrentPage(currentPage + 1);
-    };
 
     return (
         <>
+        {authRole !== ROLES.ARTIST
+        && 
+        <button
+        onClick={() => navigate(-1)} // Go back to the previous page
+        className="flex items-center gap-2 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
+        >
+        <ArrowLeft className="h-5 w-5" />
+        Back
+        </button>}
         <table className="w-full  ">
         <thead className="bg-gray-50">
         <tr>
@@ -127,17 +129,10 @@ const ArtistsTable = (key: boolean) => {
                                 {
                                     ele?.system_name 
                                         ? artist[ele.system_name]
-                                        : ele?.actions &&(
+                                        : ele?.actions && authRole === ROLES.ARTIST && (
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                             <div className="flex items-center gap-3">
-                                            <Link to={`/artists/${artist.id}`}>
-                                            <button className="text-blue-600 hover:text-blue-900">
-                                            <Eye className="h-5 w-5" />
-                                            </button>
-                                            </Link>
-                                            {
-                                                authRole === ROLES.ARTIST_MANAGER
-                                                && (<><button
+                                            <button
                                             onClick={() => handleActionClick(artist.id, "edit")}
                                             className="text-yellow-600 hover:text-yellow-900"
                                             >
@@ -149,8 +144,6 @@ const ArtistsTable = (key: boolean) => {
                                             >
                                             <Trash2 className="h-5 w-5" />
                                             </button>
-                                            </>
-                                            )}
                                             </div>
                                             </td>
                                         )
@@ -164,23 +157,6 @@ const ArtistsTable = (key: boolean) => {
             </tbody>
             </table>
             <hr className="border-gray-200" />
-            <div className="flex flex-col items-center py-5">
-            <div className="inline-flex mt-2 xs:mt-0 space-x-5">
-            <button
-            onClick={handlePrev}
-            disabled={currentPage === 1}
-            className="flex items-center justify-center px-3 h-8 text-sm font-medium text-white bg-gray-800 rounded-s hover:bg-gray-900  "
-            >
-            Prev
-            </button>
-            <button
-            onClick={handleNext}
-            className="flex items-center justify-center px-3 h-8 text-sm font-medium text-white bg-gray-800 border-0 border-s border-gray-700 rounded-e hover:bg-gray-900"
-            >
-            Next
-            </button>
-            </div>
-            </div>
 
             <Popover
             isVisible={isPopoverVisible}
@@ -194,4 +170,4 @@ const ArtistsTable = (key: boolean) => {
     );
 };
 
-export default ArtistsTable;
+export default MusicTable;

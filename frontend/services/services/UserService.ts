@@ -2,6 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { IUser } from '../models/IUser';
 import type { Omit_IUser_id_or_created_at_or_updated_at_ } from '../models/Omit_IUser_id_or_created_at_or_updated_at_';
 import type { Partial_IUserInput_ } from '../models/Partial_IUserInput_';
 import type { CancelablePromise } from '../core/CancelablePromise';
@@ -94,6 +95,19 @@ export class UserService {
                 'pageNumber': pageNumber,
                 'rowsPerPage': rowsPerPage,
             },
+        });
+    }
+    /**
+     * @returns any Fetched
+     * @throws ApiError
+     */
+    public static getUserDetails(): CancelablePromise<{
+        data?: IUser;
+        message: string;
+    }> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/user/userDetails',
         });
     }
 }

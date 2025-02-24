@@ -57,6 +57,7 @@ export const updateArtist = async(req: Partial<IArtist>) => {
     })
 
     const enterDetails = req
+    console.log('from', req)
 
 
     const parsedInput = await schema.safeParseAsync(enterDetails);

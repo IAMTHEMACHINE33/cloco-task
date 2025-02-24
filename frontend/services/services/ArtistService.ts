@@ -2,8 +2,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { IArtistOptional } from '../models/IArtistOptional';
 import type { Omit_IArtist_id_or_created_at_or_updated_at_ } from '../models/Omit_IArtist_id_or_created_at_or_updated_at_';
-import type { Partial_IArtistInput_ } from '../models/Partial_IArtistInput_';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
@@ -31,7 +31,7 @@ export class ArtistService {
      */
     public static updateArtist(
         artistId: string,
-        requestBody: Partial_IArtistInput_,
+        requestBody: IArtistOptional,
     ): CancelablePromise<any> {
         return __request(OpenAPI, {
             method: 'PATCH',

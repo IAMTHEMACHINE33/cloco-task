@@ -1,41 +1,31 @@
-// src/components/Popover.jsx
 import { useEffect, useState } from "react";
 
 const Popover = ({
   isVisible,
   actionType,
-  artistData,
+  fetchData,
   onConfirm,
   onCancel,
   onChange,
 }) => {
-  const [formData, setFormData] = useState({
-    name: "",
-    song: "",
-    album: "",
-    genre: "",
+  const [formData, setFormData] = useState<any>({
   });
 
   useEffect(() => {
-    // If artistData is passed and is not null, update formData with it
-    if (artistData) {
+    if (fetchData) {
       setFormData({
-        name: artistData.name || "",
-        song: artistData.song || "",
-        album: artistData.album || "",
-        genre: artistData.genre || "",
+          ...fetchData
       });
     }
-  }, [artistData]);
-  // Handle form input changes
+  }, [fetchData]);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    console.log(name, value);
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
-    onChange(name, value); // Optional callback for parent to track changes
+    onChange(name, value);
   };
 
   if (!isVisible) return null;
@@ -47,7 +37,7 @@ const Popover = ({
           <>
             <h2 className="text-lg font-semibold">Confirm Delete</h2>
             <p>
-              Are you sure you want to delete this artist {artistData.name}?
+              Are you sure you want to delete this artist {fetchData.name}?
             </p>
           </>
         ) : (
@@ -55,67 +45,29 @@ const Popover = ({
             <h2 className="text-lg font-semibold">Edit Artist</h2>
             <form>
               <div className="mb-4 space-y-2">
-                <label
-                  className="block text-sm font-medium text-gray-700"
-                  htmlFor="name"
-                >
-                  Artist
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-                  required
-                />
-                <label
-                  className="block text-sm font-medium text-gray-700"
-                  htmlFor="song"
-                >
-                  Song
-                </label>
-                <input
-                  required
-                  type="text"
-                  id="song"
-                  name="song"
-                  value={formData.song}
-                  onChange={handleInputChange}
-                  className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-                />
-                <label
-                  className="block text-sm font-medium text-gray-700"
-                  htmlFor="album"
-                >
-                  Album
-                </label>
-                <input
-                  required
-                  placeholder={formData.album}
-                  type="text"
-                  id="album"
-                  name="album"
-                  value={formData.album}
-                  onChange={handleInputChange}
-                  className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-                />
-                <label
-                  className="block text-sm font-medium text-gray-700"
-                  htmlFor="genre"
-                >
-                  Genre
-                </label>
-                <input
-                  required
-                  type="text"
-                  id="genre"
-                  name="genre"
-                  value={formData.genre}
-                  onChange={handleInputChange}
-                  className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-                />
+              {
+                  Object.keys(fetchData).filter(ele => ele !== 'id').map((ele: any) => {
+                    return (
+                        <>
+                        <label
+                        className="block text-sm font-medium text-gray-700"
+                        htmlFor="name"
+                        >
+                        {ele}
+                        </label>
+                        <input
+                        type="text"
+                        id={ele}
+                        name={ele}
+                        value={formData[ele]}
+                        onChange={handleInputChange}
+                        className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                        required
+                        />
+                        </>
+                    )
+                  })
+              }
               </div>
             </form>
           </>

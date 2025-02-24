@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { ValidateError } from 'tsoa';
-import { AuthenticationError } from './customError';
+import { AuthenticationError, AuthorizationError} from './customError';
 
 export function errorHandler(
   err: unknown,
@@ -20,6 +20,12 @@ export function errorHandler(
 
         res.status(401).json({
             message: 'AuthenticationError',
+            error: err.message,
+        });
+    }
+    else if (err instanceof AuthorizationError) {
+        res.status(403).json({
+            message: 'AuthorizationError',
             error: err.message,
         });
     }

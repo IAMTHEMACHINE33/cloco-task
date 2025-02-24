@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState, useRef } from 'react';
 // import { storageKey } from '@/constants/storageKey';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { OpenAPI } from '../../services/index.ts';
 // import { useAuthXTenantId } from './useAuthDetail';
 
 export type HandleRequestFunction = <T>(
@@ -18,25 +19,24 @@ export function useApiService() {
     const handleRequest = useCallback(async function <T>(request: Promise<T>) {
         setIsloading(true);
         try {
+
+    // Some code that requests a token...
+            const getToken = async () => {
+                return localStorage.getItem('accessToken') || '';
+            };
+            OpenAPI.TOKEN = getToken;
+
             const response = await request;
             setError(undefined);
             return response;
         } catch (exception: any) {
             setError(exception);
-
+            console.log(exception?.status)
             if (
-                exception?.status === 401 &&
-                    !isToastShown?.current &&
-                    isToastShownInitialized.current
+                exception?.status === 401
             ) {
-                toast.error(
-                    exception.body.error.message === 'Token is expired'
-                        ? 'Your session has expired. Please login again'
-                        : exception.body.error.message,
-                    { toastId: 'invalidTokenToast' }
-                );
+                localStorage.removeItem('accessToken')
                 navigate('/login');
-                isToastShown.current = true;
             }
             throw exception;
         } finally {

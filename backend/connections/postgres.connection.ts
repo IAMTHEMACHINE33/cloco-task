@@ -1,10 +1,11 @@
 import { Pool, Client, DatabaseError } from 'pg';
-import { user } from "../entities/user.entities"
+import { user, userView } from "../entities/user.entities"
 import { role } from "../entities/role.entities"
 import { gender } from "../entities/gender.entities"
 import { artist } from "../entities/artist.entities"
 import { genre } from "../entities/genre.entities"
 import { music } from "../entities/music.entities"
+
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -66,7 +67,7 @@ export const connectDb = async () => {
 
 export const createTables = async () => {
     const client = await db.connect();
-    const entities = [role, gender, user, genre, artist, music]
+    const entities = [role, gender, user, genre, artist, music, userView]
     entities.forEach(async query => await client.query(query))
     client.release()
 }

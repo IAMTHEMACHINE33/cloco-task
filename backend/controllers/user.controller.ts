@@ -1,11 +1,13 @@
 import { UserService } from '../services/user.services';
-import { Controller, Route, Tags, Get, SuccessResponse, Post, Body, Patch, Delete, Path, Security, Query } from "tsoa";
+import express from 'express'
+import { Controller, Route, Tags, Get, SuccessResponse, Post, Body, Patch, Delete, Path, Security, Query, Request } from "tsoa";
 import { IUser } from "../entities/user.entities"
 import * as userValidator from '../validators/user.validator'
 import { DatabaseError } from 'pg';
 import * as jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import { Role } from '../entities/role.entities';
+import { TABLE_VIEW } from '../constants';
 dotenv.config()
 
 export type IUserInput = Omit<IUser, "id"|"created_at"|"updated_at">
@@ -14,6 +16,7 @@ export type IUserOptional = Partial<IUserInput>
 @Tags('user')
 export class UserController extends Controller{
   private userService = new UserService();
+  private userViewService = new UserService(TABLE_VIEW.USER_VIEW);
 
   constructor() {
         super()
@@ -39,19 +42,19 @@ export class UserController extends Controller{
             await this.userService.save<IUser>(requestBody);
 
             this.setStatus(201)
-            return { message: 'User registered successfully' };
+            return { success: true, message: 'User registered successfully' };
         } catch (error) {
             if (error instanceof DatabaseError) {
                 switch(error.code) {
                     case '23505': {
                         this.setStatus(400)
-                        return { message: 'User already exists'}
+                        return { success: false, message: 'User already exists'}
                     }
                 }
             }
             console.error(error)
             this.setStatus(500)
-            return { message: 'Something went wrong' };
+            return { success: false, message: 'Something went wrong' };
         }
     }
 
@@ -77,7 +80,7 @@ export class UserController extends Controller{
             }
             const token = jwt.sign({
                 data: data.id
-            }, process.env.JWT_SECRET as string, { expiresIn: '1h' });
+            }, process.env.JWT_SECRET as string, { expiresIn: '8h' });
 
             this.setStatus(200)
             return { message: 'Login successfully' , token: token};
@@ -171,7 +174,24 @@ export class UserController extends Controller{
         @Query() rowsPerPage: number = 10,
     ):Promise<any>{
         try {
-            const data = await this.userService.getAll(pageNumber, rowsPerPage);
+            const data = await this.userViewService.getAll(pageNumber, rowsPerPage);
+            return { message: 'Successfully fetched', data: data};
+        } catch (error) {
+            console.error(error)
+            this.setStatus(500)
+            return { message: 'Something went wrong' };
+        }
+    }
+
+
+    @Security("jwt", [Role.SuperAdmin, Role.Artist, Role.ArtistManager])
+    @SuccessResponse("200", "Fetched")
+    @Get("/userDetails")
+    async getUserDetails(
+    @Request() request: express.Request & {user: IUser}
+    ):Promise<{message: string, data?: IUser}>{
+        try {
+            const data = request.user;
             return { message: 'Successfully fetched', data: data};
         } catch (error) {
             console.error(error)

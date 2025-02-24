@@ -2,6 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { IMusic } from '../models/IMusic';
 import type { Omit_IMusic_id_or_created_at_or_updated_at_ } from '../models/Omit_IMusic_id_or_created_at_or_updated_at_';
 import type { Partial_IMusicInput_ } from '../models/Partial_IMusicInput_';
 import type { CancelablePromise } from '../core/CancelablePromise';
@@ -66,7 +67,10 @@ export class MusicService {
      */
     public static getArtistMusic(
         artistId: string,
-    ): CancelablePromise<any> {
+    ): CancelablePromise<{
+        data?: Array<IMusic>;
+        message: string;
+    }> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/music/{artistId}',

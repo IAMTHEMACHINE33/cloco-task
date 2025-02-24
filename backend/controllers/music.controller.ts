@@ -1,12 +1,15 @@
-import { Controller, Route, Tags, Get, SuccessResponse, Post, Body, Patch, Delete, Path, Security, Query } from "tsoa";
+import { Controller, Route, Tags, Get, SuccessResponse, Post, Body, Patch, Delete, Path, Security, Query, Request } from "tsoa";
+import express from 'express'
 import { DatabaseError } from 'pg';
 import { IMusic } from "../entities/music.entities";
 import * as musicValidator from "../validators/music.validator"
 import { MusicService } from "../services/music.services";
-import { Role } from "../entities/role.entities";
+import { role, Role } from "../entities/role.entities";
+import { IUser } from "../entities/user.entities";
 
 export type IMusicInput = Omit<IMusic, "id"|"created_at"|"updated_at">
 export type IMusicOptional = Partial<IMusicInput>
+export type IMuiscExcludeArtist = Omit<IMusicInput, "artist_id"> & Partial<Pick<IMusicInput, "artist_id">>;
 
 @Route('music')
 @Tags('music')
@@ -25,7 +28,7 @@ export class MusicController extends Controller{
     @SuccessResponse("201", "Created")
     @Post("/create")
     async createMusic(
-    @Body() requestBody: IMusicInput):Promise<any>{
+    @Body() requestBody: IMuiscExcludeArtist):Promise<any>{
         try {
             const validation = await musicValidator.createMusic(requestBody)
             if (!validation.success) {
@@ -122,10 +125,13 @@ export class MusicController extends Controller{
     @SuccessResponse("200", "Fetched")
     @Get("/{artistId}")
     async getArtistMusic(
-        @Path('artistId') artistId: string
-    ):Promise<any>{
+        @Path('artistId') artistId: string,
+        @Request() request: express.Request & {user: IUser}
+    ):Promise<{message: string, data?: IMusic[]}>{
         try {
-            const data = await this.musicService.getWhere({artist_id: artistId});
+            let data
+            if (request.user.role === Role.Artist) data = await this.musicService.getAll(1, 100000);
+                else  data = await this.musicService.getWhere<IMusic>({artist_id: artistId});
             return { message: 'Successfully fetched', data: data};
         } catch (error) {
             console.error(error)

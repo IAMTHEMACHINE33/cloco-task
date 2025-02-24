@@ -9,7 +9,6 @@ export function RegisterForm() {
   const [lastname, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [phone, setPhone] = useState("");
   const [dob, setDob] = useState("");
   const [address, setAddress] = useState("");
@@ -94,10 +93,15 @@ export function RegisterForm() {
     <input
       id="phone"
       name="phone"
-      type="tel"
+      type="text"
       required
       value={phone}
-      onChange={(e) => setPhone(e.target.value)}
+      onChange={(e) => {
+          const input = e.target.value.replace(/\D/g, ""); 
+          if (input.length <= 10) {
+              setPhone(input); 
+          }
+      }}
       className="appearance-none relative block w-full px-3 py-3 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
       placeholder="Phone Number"
     />
@@ -142,27 +146,6 @@ export function RegisterForm() {
               onChange={(e) => setPassword(e.target.value)}
               className="appearance-none relative block w-full px-3 py-3 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
               placeholder="Password"
-            />
-          </div>
-        </div>
-        <div>
-          <label htmlFor="confirmPassword" className="sr-only">
-            Confirm Password
-          </label>
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Lock className="h-5 w-5 text-gray-400" />
-            </div>
-            <input
-              id="confirmPassword"
-              name="confirmPassword"
-              type="password"
-              autoComplete="new-password"
-              required
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              className="appearance-none relative block w-full px-3 py-3 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-              placeholder="Confirm Password"
             />
           </div>
         </div>

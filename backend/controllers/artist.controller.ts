@@ -6,7 +6,7 @@ import * as artistValidator from "../validators/artist.validator"
 import { Role } from "../entities/role.entities";
 
 export type IArtistInput = Omit<IArtist, "id"|"created_at"|"updated_at">
-export type IArtistOptional = Partial<IArtistInput>
+export type IArtistOptional = Partial<IArtistInput> & {user?: any}
 @Route('artist')
 @Tags('artist')
 export class ArtistController extends Controller{
@@ -64,6 +64,7 @@ export class ArtistController extends Controller{
                 this.setStatus(400)
                 return { message: validation.data}
             }
+            console.log('from body')
 
             // TODO: decrypt and compare password  
             await this.artistService.updateWhere<IArtist>({id: artistId}, requestBody)
@@ -126,11 +127,11 @@ export class ArtistController extends Controller{
     ):Promise<any>{
         try {
             const data = await this.artistService.getAll(pageNumber, rowsPerPage);
-            return { message: 'Successfully fetched', data: data};
+            return { success: true, message: 'Successfully fetched', data: data};
         } catch (error) {
             console.error(error)
             this.setStatus(500)
-            return { message: 'Something went wrong' };
+            return { success: false, message: 'Something went wrong' };
         }
     }
 }

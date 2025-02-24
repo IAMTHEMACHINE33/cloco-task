@@ -3,4 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { Partial_IArtistInput_ } from './Partial_IArtistInput_';
-export type IArtistOptional = Partial_IArtistInput_;
+export type IArtistOptional = (Partial_IArtistInput_ & {
+    user?: any;
+});
+

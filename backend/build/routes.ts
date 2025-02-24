@@ -54,9 +54,38 @@ const models: TsoaRoute.Models = {
         "type": {"ref":"Partial_IUserInput_","validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "IUser": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"string","required":true},
+            "first_name": {"dataType":"string","required":true},
+            "last_name": {"dataType":"string","required":true},
+            "email": {"dataType":"string","required":true},
+            "password": {"dataType":"string","required":true},
+            "phone": {"dataType":"string","required":true},
+            "dob": {"dataType":"string","required":true},
+            "gender": {"ref":"Gender","required":true},
+            "address": {"dataType":"string","required":true},
+            "role": {"ref":"Role","required":true},
+            "created_at": {"dataType":"string","required":true},
+            "updated_at": {"dataType":"string","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "Genre": {
         "dataType": "refEnum",
         "enums": ["rnb","country","classic","rock","jazz"],
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "Pick_IMusicInput.Exclude_keyofIMusicInput.artist_id__": {
+        "dataType": "refAlias",
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"title":{"dataType":"string","required":true},"album_name":{"dataType":"string","required":true},"genre":{"ref":"Genre","required":true}},"validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "Omit_IMusicInput.artist_id_": {
+        "dataType": "refAlias",
+        "type": {"ref":"Pick_IMusicInput.Exclude_keyofIMusicInput.artist_id__","validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "IArtist": {
@@ -74,19 +103,14 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "Pick_IMusic.Exclude_keyofIMusic.id-or-created_at-or-updated_at__": {
+    "Partial_Pick_IMusicInput.artist_id__": {
         "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"title":{"dataType":"string","required":true},"album_name":{"dataType":"string","required":true},"genre":{"ref":"Genre","required":true},"artist_id":{"dataType":"union","subSchemas":[{"dataType":"string"},{"ref":"IArtist"}],"required":true}},"validators":{}},
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"artist_id":{"dataType":"union","subSchemas":[{"dataType":"string"},{"ref":"IArtist"}]}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "Omit_IMusic.id-or-created_at-or-updated_at_": {
+    "IMuiscExcludeArtist": {
         "dataType": "refAlias",
-        "type": {"ref":"Pick_IMusic.Exclude_keyofIMusic.id-or-created_at-or-updated_at__","validators":{}},
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "IMusicInput": {
-        "dataType": "refAlias",
-        "type": {"ref":"Omit_IMusic.id-or-created_at-or-updated_at_","validators":{}},
+        "type": {"dataType":"intersection","subSchemas":[{"ref":"Omit_IMusicInput.artist_id_"},{"ref":"Partial_Pick_IMusicInput.artist_id__"}],"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "Partial_IMusicInput_": {
@@ -97,6 +121,20 @@ const models: TsoaRoute.Models = {
     "IMusicOptional": {
         "dataType": "refAlias",
         "type": {"ref":"Partial_IMusicInput_","validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "IMusic": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"string","required":true},
+            "title": {"dataType":"string","required":true},
+            "album_name": {"dataType":"string","required":true},
+            "genre": {"ref":"Genre","required":true},
+            "artist_id": {"dataType":"union","subSchemas":[{"dataType":"string"},{"ref":"IArtist"}],"required":true},
+            "created_at": {"dataType":"string","required":true},
+            "updated_at": {"dataType":"string","required":true},
+        },
+        "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "Pick_IArtist.Exclude_keyofIArtist.id-or-created_at-or-updated_at__": {
@@ -121,7 +159,7 @@ const models: TsoaRoute.Models = {
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "IArtistOptional": {
         "dataType": "refAlias",
-        "type": {"ref":"Partial_IArtistInput_","validators":{}},
+        "type": {"dataType":"intersection","subSchemas":[{"ref":"Partial_IArtistInput_"},{"dataType":"nestedObjectLiteral","nestedProperties":{"user":{"dataType":"any"}}}],"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 };
@@ -296,8 +334,39 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsUserController_getUserDetails: Record<string, TsoaRoute.ParameterSchema> = {
+                request: {"in":"request","name":"request","required":true,"dataType":"object"},
+        };
+        app.get('/user/userDetails',
+            authenticateMiddleware([{"jwt":["super_admin","artist","artist_manager"]}]),
+            ...(fetchMiddlewares<RequestHandler>(UserController)),
+            ...(fetchMiddlewares<RequestHandler>(UserController.prototype.getUserDetails)),
+
+            async function UserController_getUserDetails(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsUserController_getUserDetails, request, response });
+
+                const controller = new UserController();
+
+              await templateService.apiHandler({
+                methodName: 'getUserDetails',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: 200,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argsMusicController_createMusic: Record<string, TsoaRoute.ParameterSchema> = {
-                requestBody: {"in":"body","name":"requestBody","required":true,"ref":"IMusicInput"},
+                requestBody: {"in":"body","name":"requestBody","required":true,"ref":"IMuiscExcludeArtist"},
         };
         app.post('/music/create',
             authenticateMiddleware([{"jwt":["artist"]}]),
@@ -392,6 +461,7 @@ export function RegisterRoutes(app: Router) {
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argsMusicController_getArtistMusic: Record<string, TsoaRoute.ParameterSchema> = {
                 artistId: {"in":"path","name":"artistId","required":true,"dataType":"string"},
+                request: {"in":"request","name":"request","required":true,"dataType":"object"},
         };
         app.get('/music/:artistId',
             authenticateMiddleware([{"jwt":["super_admin","artist_manager","artist"]}]),

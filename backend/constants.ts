@@ -3,3 +3,7 @@ export const TABLE_NAME = {
     ARTIST:'artist',
     MUSIC:'music'
 }
+
+export const TABLE_VIEW = {
+    USER_VIEW: 'user_view'
+}
